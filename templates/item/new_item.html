@@ -1,0 +1,76 @@
+{% extends './base.html' %}
+
+{% block title %}Decorumbas{% endblock %}
+
+{% block customJS %}
+
+<script src="/static/js/api.js" async></script>
+
+
+
+{% endblock %}
+
+{% block body %}
+
+<main class="contenido">
+    <div class="container-item">
+
+        <form action="/new_item" method="POST" class="container-form">
+            {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+            <br />
+            {% for messages in messages %}
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <strong>{{ messages }}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <div class="column">
+                <h3>Productos</h3>
+                <h5>Agregar Productos</h5>
+            </div>
+            <div class="contenedor-item">
+                <div class="row">
+                    <label for="cod" class="label-item">Código</label>
+                    <input type="text" name="cod" id="cod" class="wd-20 input-item">
+                    <label for="nombre" class="label-item">Nombre</label>
+                    <input type="text" name="nombre" id="nombre" class="wd-100 input-item">
+                </div>
+                <div class="row">
+                    <label for="cod" class="label-item">Precio</label>
+                    <input type="text" name="precio" id="precio" class="wd-40 input-item">
+                    <label for="stock" class="label-item">Stock</label>
+                    <input type="text" name="stock" id="stock" class="wd-40 input-item">
+                </div>
+                <div class="row">
+                    <label for="src" class="label-item">Imagen</label>
+                    <input type="text" name="src" id="src" class="wd-100 input-item">
+                </div>
+                <div class="row">
+                    <select name="id_categoria" id="id_marca" width="150px">
+                        <option value="1" selected>Valor 1</option>
+                        
+                    </select>
+                    <select name="id_marca" id="id_marca">
+                        <option value="1" selected>Valor 1</option>
+                        <!-- <option value=""></option> -->
+                    </select>
+                    <select name="id_tamanio" id="id_marca">
+                        <option value="1" selected>Valor 1</option>
+                        <!-- <option value=""></option> -->
+                    </select>
+                    <label for="activo">Activo</label>
+                    <input type="checkbox" name="activo" id="activo">
+                </div>
+                <textarea name="descripcion" id="descripcion" cols="30" rows="10" class="wd-100">Descripcion</textarea>
+
+                <button type="submit" class="wd-100 hg-30">Agregar Producto</button>
+            </div>
+        </form>
+
+    </div>
+</main>
+{% endblock %}

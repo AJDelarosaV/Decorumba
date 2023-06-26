@@ -1,0 +1,125 @@
+{% extends './base.html' %}
+
+{% block title %}Decorumbas{% endblock %}
+
+{% block customCSS %}
+<link rel="stylesheet" href="/static/css/style_reg.css">
+{% endblock %}
+
+{% block body %}
+<div class="contenido">
+    <!-- FORMULARIO DE REGISTRO -->
+    <div class="main">
+        <h2>Formulario de Registro</h2>
+        <form action="/sign_in" class="formulario" id="formulario" method="POST">
+            {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+            <br />
+            {% for messages in messages %}
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <strong>{{ messages }}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <!-- Campo: USUARIO -->
+            <div class="grupo_formulario" id="grupo_usuario">
+                <label for="usuario" class="formulario_etiqueta">Usuario</label>
+                <div class="formulario_grupo_input">
+                    <input type="text" name="usuario" id="usuario" class="formulario_input"
+                        placeholder="Escribe tu usuario aqui">
+                    <i class="formulario_validacion-estado fa-sharp fa-solid fa-circle-xmark"></i>
+                    <!-- <i class="fa-solid fa-check"></i> -->
+                </div>
+                <p class="formulario_input-error">El usuario tiene que ser de 6 a 15 digitos y solo puede
+                    contener letras, numeros y guión bajo.</p>
+            </div>
+
+            <!-- Campo: NOMBRE -->
+            <div class="grupo_f ormulario" id="grupo_nombre">
+                <label for="nombre" class="formulario_etiqueta">Nombre</label>
+                <div class="formulario_grupo_input">
+                    <input type="text" name="nombre" id="nombre" class="formulario_input" placeholder="Aqui tu nombre">
+                    <i class="formulario_validacion-estado fa-sharp fa-solid fa-circle-xmark"></i>
+                    <!-- <i class="fa-solid fa-check"></i> -->
+                </div>
+                <p class="formulario_input-error">El nombre solo puede contener letras.</p>
+            </div>
+
+            <!-- Campo: CONTRASEÑA -->
+            <div class="grupo_formulario" id="grupo_password">
+                <label for="password" class="formulario_etiqueta">Contraseña</label>
+                <div class="formulario_grupo_input">
+                    <input type="password" name="password" id="password" class="formulario_input">
+                    <i class="formulario_validacion-estado fa-sharp fa-solid fa-circle-xmark"></i>
+                    <!-- <i class="fa-solid fa-check"></i> -->
+                </div>
+                <p class="formulario_input-error">La contraseña tiene que ser de 6 a 12 digitos.</p>
+            </div>
+
+            <!-- Campo: CONTRASEÑA2 -->
+            <div class="grupo_formulario" id="grupo_password2">
+                <label for="password2" class="formulario_etiqueta">Repetir Contraseña</label>
+                <div class="formulario_grupo_input">
+                    <input type="password" name="password2" id="password2" class="formulario_input">
+                    <i class="formulario_validacion-estado fa-sharp fa-solid fa-circle-xmark"></i>
+                    <!-- <i class="fa-solid fa-check"></i> -->
+                </div>
+                <p class="formulario_input-error">Ambas contraseñas deben ser iguales.</p>
+            </div>
+
+            <!-- Campo: CORREO -->
+            <div class="grupo_formulario" id="grupo_correo">
+                <label for="correo" class="formulario_etiqueta">Correo Electrónico</label>
+                <div class="formulario_grupo_input">
+                    <input type="email" name="correo" id="correo" class="formulario_input" placeholder="abc@de.com">
+                    <i class="formulario_validacion-estado fa-sharp fa-solid fa-circle-xmark"></i>
+                    <!-- <i class="fa-solid fa-check"></i> -->
+                </div>
+                <p class="formulario_input-error">El correo solo puede contener letras, numeros, puntos y guión
+                    bajo.</p>
+            </div>
+
+            <!-- Campo: TELEFONO -->
+            <div class="grupo_formulario" id="grupo_telefono">
+                <label for="telefono" class="formulario_etiqueta">Teléfono</label>
+                <div class="formulario_grupo_input">
+                    <input type="text" name="telefono" id="telefono" class="formulario_input"
+                        placeholder="1591111111111">
+                    <i class="formulario_validacion-estado fa-sharp fa-solid fa-circle-xmark"></i>
+                    <!-- <i class="fa-solid fa-check"></i> -->
+                </div>
+                <p class="formulario_input-error">El telefono solo puede contener numeros y un maximo de 13
+                    digitos</p>
+            </div>
+
+            <!-- Campo: TERMINOS Y CONDICIONES -->
+            <div class="formulario_terminos" id="grupo_terminos">
+                <label class="formulario_etiqueta">
+                    <input type="checkbox" name="terminos" id="terminos" class="formulario_checkbox">Acepto los
+                    Terminos y Condiciones
+                </label>
+            </div>
+            <!-- Campo: MENSAJE DE ERROR -->
+            <div class="formulario_mensaje" id="formulario_mensaje">
+                <p><i class="fa-regular fa-triangle-exclamation"></i><b>Error:</b> Por favor rellena todos los
+                    campos del formulario</p>
+            </div>
+
+            <!-- Campo: BOTON DE ENVIAR -->
+            <div class="formulario_btn_enviar" id="formulario_btn_enviar">
+                <button type="submit" class="formulario_btn">Enviar</button>
+                <p class="formulario_mensaje_exito" id="formulario_mensaje_exito">El formiulario fue enviado
+                    exitosamente.</p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block customJS %}
+<script src="/static/js/validacion.js"></script>
+{% endblock %}

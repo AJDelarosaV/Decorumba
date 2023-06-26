@@ -1,0 +1,84 @@
+{% extends './base.html' %}
+
+{% block title %}Decorumbas{% endblock %}
+
+{% block customJS %}
+<!-- <script src="/static/js/cargadeproductos.js" async></script> -->
+<script src="/static/js/api.js" async></script>
+<script src="/static/js/app.js" async></script>
+<script src="/static/js/open.js" async></script>
+
+{% endblock %}
+
+{% block body %}
+
+<main class="contenido">
+
+    <h1>Productos</h1>
+    <span>Todo lo que necesites para tu fiesta!!!</span>
+    <div class="container-contenido">
+        <!-- PRODUCTOS ---->
+        <div class="container-productos">
+            {% for item in items %}
+            <div class="producto">
+                <span class="titulo-producto">{{item.nombre}}</span>
+                <img src="{{ item.src }}" alt="" class="img-producto">
+                <span class="precio-producto">${{ item.precio}}</span>
+                <button class="btn-agregar-producto">Agregar al Carrito</button>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- CARRO DE COMPRAS -->
+        <div id="container-carrito" class="container-carrito">
+            <div class="header-carrito">
+                <h2>Carro de Compras</h2>
+            </div>
+
+            <div class="carrito-items">
+                <!--  
+                <div class="carrito-item">
+                    <img src="/img/productos/productos de manualidades/acrilico_50cc.webp" width="80px" alt="">
+                    <div class="carrito-item-detalles">
+                        <span class="carrito-item-titulo">ACRILICO 50CC</span>
+                        <div class="selector-cantidad">
+                            <i class="fa-solid fa-minus restar-cantidad"></i>
+                            <input type="text" value="1" class="carrito-item-cantidad" disabled>
+                            <i class="fa-solid fa-plus sumar-cantidad"></i>
+                        </div>
+                        <span class="carrito-item-precio">$500</span>
+                    </div>
+                    <span class="btn-eliminar-producto">
+                        <i class="fa-solid fa-trash"></i>
+                    </span>
+                </div>
+                <div class="carrito-item">
+                    <img src="/img/productos/piñatas/PIÑATA ROBLOX.webp" width="80px" alt="">
+                    <div class="carrito-item-detalles">
+                        <span class="carrito-item-titulo">PIÑATA ROBLOX</span>
+                        <div class="selector-cantidad">
+                            <i class="fa-solid fa-minus restar-cantidad"></i>
+                            <input type="text" value="3" class="carrito-item-cantidad" disabled>
+                            <i class="fa-solid fa-plus sumar-cantidad"></i>
+                        </div>
+                        <span class="carrito-item-precio">$750</span>
+                    </div>
+                    <button class="btn-eliminar-producto">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>-->
+                <!--  -->
+
+            </div>
+            <div class="carrito-total">
+                <div class="fila">
+                    <strong>Total Compra</strong>
+                    <span class="carrito-precio-total">
+                        $120.000,00
+                    </span>
+                </div>
+                <button class="btn-pagar">Pagar<i class="fa-solid fa-bag-shopping"></i> </button>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

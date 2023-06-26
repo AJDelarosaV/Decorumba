@@ -1,0 +1,51 @@
+{% extends './base.html' %}
+
+{% block title %}Decorumbas{% endblock %}
+
+{% block customCSS %}
+<link rel="stylesheet" href="/static/css/style_reg.css">
+
+{% endblock %}
+
+{% block body %}
+<div class="contenido">
+
+    <div class="container-form">
+        <!-- FORMULARIO DE LOGIN ---->
+        <h2 style="text-align: center; margin:15px 0 30px 0;">Ingresa a tu cuenta</h2>
+        <form action="/login" id="box_formulario" class="box_formulario" method="POST">
+            {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+            <br />
+            {% for messages in messages %}
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <strong>{{ messages }}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <label for="user_email" class="formulario_etiqueta" placeholder="Escribe tu usuario ó correo">Correo /
+                Usuario</label><br>
+            <input type="text" name="user_email" id="user_email" class="user_email formulario_input" required><br><br>
+            <label for="user_password" class="formulario_etiqueta">Contraseña</label><br>
+            <input type="password" name="user_password" id="user_password" class="user_email formulario_input"
+                required><br><br>
+            <div class="formulario_btn_enviar">
+                <button type="submit" id="btn-login" class="formulario_btn btn-login">Iniciar
+                    Sesión</button><br><br>
+                <span><a href="{{ url_for('sign_in') }}" class="formulario_etiqueta"><b>Registrate
+                            Aqui</b></a></span>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block customJS %}
+<script src="/static/js/validacion_contacto.js"></script>
+
+{% endblock %}
