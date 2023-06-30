@@ -24,18 +24,21 @@
                 <span class="titulo-producto">{{item.nombre}}</span>
                 <img src="{{ item.src }}" alt="" class="img-producto">
                 <span class="precio-producto">${{ item.precio}}</span>
+                <span class="codigo-producto" style="display: none;">{{ item.cod}}</span>
+                <a href="{{url_for('agregar_carrito', cod = item.cod)}}">AGREGA</a>
                 <button class="btn-agregar-producto">Agregar al Carrito</button>
             </div>
             {% endfor %}
         </div>
         <!-- CARRO DE COMPRAS -->
         <div id="container-carrito" class="container-carrito">
-            <div class="header-carrito">
-                <h2>Carro de Compras</h2>
-            </div>
+            <form action="#" method="post">
+                <div class="header-carrito">
+                    <h2>Carro de Compras</h2>
+                </div>
 
-            <div class="carrito-items">
-                <!--  
+                <div class="carrito-items">
+                    <!--  
                 <div class="carrito-item">
                     <img src="/img/productos/productos de manualidades/acrilico_50cc.webp" width="80px" alt="">
                     <div class="carrito-item-detalles">
@@ -66,18 +69,19 @@
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>-->
-                <!--  -->
+                    <!--  -->
 
-            </div>
-            <div class="carrito-total">
-                <div class="fila">
-                    <strong>Total Compra</strong>
-                    <span class="carrito-precio-total">
-                        $120.000,00
-                    </span>
                 </div>
-                <button class="btn-pagar">Pagar<i class="fa-solid fa-bag-shopping"></i> </button>
-            </div>
+                <div class="carrito-total">
+                    <div class="fila">
+                        <strong>Total Compra</strong>
+                        <span class="carrito-precio-total">
+                            $120.000,00
+                        </span>
+                    </div>
+                    <button class="btn-pagar" type="submit">Pagar<i class="fa-solid fa-bag-shopping"></i> </button>
+                </div>
+            </form>
         </div>
     </div>
 </main>

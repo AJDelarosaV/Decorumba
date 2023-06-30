@@ -1,26 +1,23 @@
-<!-- HEREDA DE LA PLANTILLA BASE -->
 {% extends './base.html' %}
 
-<!-- HEAD -->
 {% block title %}Decorumbas{% endblock %}
 
-<!-- CONFIGURACION ARCHIVO CSS -->
-{% block customJCSS%}
-{% endblock %}
-
-<!-- CONFIGURACION ARCHIVO JAVASCRIPTS -->
 {% block customJS %}
+
 <script src="/static/js/api.js" async></script>
 <script src="/static/js/app.js" async></script>
+
+
 {% endblock %}
 
-<!-- BODY -->
 {% block body %}
+
 <main class="contenido">
     <div class="container-item">
 
-        <form action="/item" method="POST" class="container-form">
+        <form action="/actualizar_producto" method="POST" class="container-form">
             {% with messages = get_flashed_messages() %}
+
             {% if messages %}
             <br />
             {% for messages in messages %}
@@ -33,7 +30,7 @@
             {% endwith %}
             <div class="column">
                 <h3>Productos</h3>
-                <h5>Agregar Productos</h5>
+                <h5>Actualizar Productos</h5>
             </div>
             <div class="contenedor-item">
                 <div class="row">
@@ -53,20 +50,23 @@
                     <input type="text" name="src" id="src" class="wd-100 input-item">
                 </div>
                 <div class="row">
-                    <label for="categoria" class="label-item">Categoria</label>
-                    <input type="text" name="categoria" id="categoria" class="wd-100 input-item">
-                    <label for="marca" class="label-item">Marca</label>
-                    <input type="text" name="marca" id="marca" class="wd-100 input-item">
-                    <label for="tamanio" class="label-item">Tamanio</label>
-                    <input type="text" name="tamanio" id="tamanio" class="wd-100 input-item">
+                    <select name="id_categoria" id="id_marca" width="150px">
+                        <option value="1" selected>Valor 1</option>
+                        
+                    </select>
+                    <select name="marca" id="marca">
+                        <option value="1" selected>Valor 1</option>
+                        <!-- <option value=""></option> -->
+                    </select>
+                    <select name="tamanio" id="marca">
+                        <option value="1" selected>Valor 1</option>
+                        <!-- <option value=""></option> -->
+                    </select>
+                    
                 </div>
-                <div class="row">
-                    <textarea name="descripcion" id="descripcion" cols="30" rows="5" class="wd-100">Descripcion</textarea>
-                </div>
-                <div class="row">
-                    <button type="submit" class="wd-100 hg-30">Agregar Producto</button>
-            
-                </div>
+                <textarea name="descripcion" id="descripcion" cols="30" rows="10" class="wd-100">Descripcion</textarea>
+
+                <button type="submit" class="wd-100 hg-30">Buscar Producto</button>
             </div>
         </form>
 

@@ -9,12 +9,10 @@ class ModelUser():
             cursor = db.connection.cursor()
             sql= """SELECT * FROM usuarios WHERE username = '{}'""".format(usuario)
             cursor.execute(sql)
-            row=cursor.fetchone()
-            
-            if row != None:
-                user=User(row[0], bool(row[8]), row[1], User.check_password(row[2], password) , row[3], row[4], row[5], row[6], row[7])
+            row=cursor.fetchone()        
 
-                
+            if row != None:
+                user=User(row[0], row[1], User.check_password(row[2], password), row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10])  
                 return user
 
         except Exception as ex:
@@ -29,16 +27,16 @@ class ModelUser():
             row=cursor.fetchone()
 
             if row != None:
-                return User(row[0], bool(row[8]), row[1], False , row[3], row[4], row[5], row[6], row[7])
+                return User(row[0], row[1], False, row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10])
                 
         except Exception as ex:
             raise Exception(ex)
 
     @classmethod
-    def sign_in(self, db, user):
+    def sign_up(self, db, user):
         try:
             cursor = db.connection.cursor()
-            sql= """INSERT INTO `usuarios`(`id_usuario`, `username`, `password`, `nombre`, `apellido`, `email`, `fecha_creacion`, `fecha_actualizacion`, `autorizado`) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}')""".format(0, user.username, user.password, user.nombre, user.apellido, user.email, user.fecha_creacion, user.fecha_actualizacion, user.autorizado)
+            sql= """INSERT INTO `usuarios`(`id_usuario`, `username`, `password`, `fullname`, `telefono`, `email`, `direccion`, `cp`, `ciudad`, `fecha_creacion`,  `autorizado`) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')""".format('null', user.username, user.password, user.fullname, user.telefono, user.email, user.direccion, user.cp, user.ciudad, user.fecha_creacion, user.autorizado)
             cursor.execute(sql)
             db.connection.commit()
             db.connection.close()

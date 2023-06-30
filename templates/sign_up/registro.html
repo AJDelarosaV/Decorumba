@@ -5,13 +5,15 @@
 {% block customCSS %}
 <link rel="stylesheet" href="/static/css/style_reg.css">
 {% endblock %}
-
+{% block customJS %}
+<script src="/static/js/validacion.js"></script>
+{% endblock %}
 {% block body %}
 <div class="contenido">
     <!-- FORMULARIO DE REGISTRO -->
     <div class="main">
         <h2>Formulario de Registro</h2>
-        <form action="/sign_in" class="formulario" id="formulario" method="POST">
+        <form action="/sign_up" class="formulario" id="formulario" method="POST">
             {% with messages = get_flashed_messages() %}
 
             {% if messages %}
@@ -39,14 +41,14 @@
             </div>
 
             <!-- Campo: NOMBRE -->
-            <div class="grupo_f ormulario" id="grupo_nombre">
-                <label for="nombre" class="formulario_etiqueta">Nombre</label>
+            <div class="grupo_formulario" id="grupo_fullname">
+                <label for="fullname" class="formulario_etiqueta">Nombre y Apellido</label>
                 <div class="formulario_grupo_input">
-                    <input type="text" name="nombre" id="nombre" class="formulario_input" placeholder="Aqui tu nombre">
+                    <input type="text" name="fullname" id="fullname" class="formulario_input" placeholder="Aqui tu nombre completo">
                     <i class="formulario_validacion-estado fa-sharp fa-solid fa-circle-xmark"></i>
                     <!-- <i class="fa-solid fa-check"></i> -->
                 </div>
-                <p class="formulario_input-error">El nombre solo puede contener letras.</p>
+                <p class="formulario_input-error">El nombre y apellido solo puede contener letras.</p>
             </div>
 
             <!-- Campo: CONTRASEÑA -->
@@ -96,6 +98,42 @@
                     digitos</p>
             </div>
 
+            <!-- Campo: DIRECCION -->
+            <div class="grupo_f ormulario" id="grupo_direccion">
+                <label for="direccion" class="formulario_etiqueta">Dirección</label>
+                <div class="formulario_grupo_input">
+                    <input type="text" name="direccion" id="direccion" class="formulario_input" placeholder="Aqui tu dirección">
+                    <i class="formulario_validacion-estado fa-sharp fa-solid fa-circle-xmark"></i>
+                    <!-- <i class="fa-solid fa-check"></i> -->
+                </div>
+                <p class="formulario_input-error">La dirección solo puede contener letras y números.</p>
+            </div>
+
+            <!-- Campo: CODIGO POSTAL -->
+            <div class="grupo_formulario" id="grupo_codigo_postal">
+                <label for="codigo_postal" class="formulario_etiqueta">Teléfono</label>
+                <div class="formulario_grupo_input">
+                    <input type="text" name="codigo_postal" id="codigo_postal" class="formulario_input"
+                        placeholder="12345">
+                    <i class="formulario_validacion-estado fa-sharp fa-solid fa-circle-xmark"></i>
+                    <!-- <i class="fa-solid fa-check"></i> -->
+                </div>
+                <p class="formulario_input-error">Código Postal solo puede contener numeros y un maximo de 8
+                    dígitos.</p>
+            </div>
+
+            <!-- Campo: CIUDAD -->
+            <div class="grupo_f ormulario" id="grupo_ciudad">
+                <label for="ciudad" class="formulario_etiqueta">Ciudad</label>
+                <div class="formulario_grupo_input">
+                    <input type="text" name="ciudad" id="ciudad" class="formulario_input" placeholder="Aqui tu ciudad">
+                    <i class="formulario_validacion-estado fa-sharp fa-solid fa-circle-xmark"></i>
+                    <!-- <i class="fa-solid fa-check"></i> -->
+                </div>
+                <p class="formulario_input-error">La ciudad solo puede contener letras.</p>
+            </div>
+
+
             <!-- Campo: TERMINOS Y CONDICIONES -->
             <div class="formulario_terminos" id="grupo_terminos">
                 <label class="formulario_etiqueta">
@@ -112,7 +150,7 @@
             <!-- Campo: BOTON DE ENVIAR -->
             <div class="formulario_btn_enviar" id="formulario_btn_enviar">
                 <button type="submit" class="formulario_btn">Enviar</button>
-                <p class="formulario_mensaje_exito" id="formulario_mensaje_exito">El formiulario fue enviado
+                <p class="formulario_mensaje_exito" id="formulario_mensaje_exito">El formulario fue enviado
                     exitosamente.</p>
             </div>
         </form>
@@ -120,6 +158,3 @@
 </div>
 {% endblock %}
 
-{% block customJS %}
-<script src="/static/js/validacion.js"></script>
-{% endblock %}

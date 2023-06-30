@@ -23,12 +23,12 @@ function ready() {
     
     // if (userLog ==='true'){
     //     texto.innerText = `${userNam}`;
-    //     document.getElementById('nav-carrito').classList.add('nav-carrito-inactivo');
+    //     document.getElementById('nav_carrito').classList.add('nav_carrito-inactivo');
     //     document.getElementById('close_session').classList.add('close_session-activo');
         
     // }else{
     //     texto.innerText = ''
-    //     document.getElementById('nav-carrito').classList.remove('nav-carrito-inactivo');
+    //     document.getElementById('nav_carrito').classList.remove('nav_carrito-inactivo');
     //     document.getElementById('close_session').classList.remove('close_session-activo');
     // }
 
@@ -73,36 +73,37 @@ function agregarAlCarritoClicked(event) {
     var item = button.parentElement;
     var titulo = item.getElementsByClassName('titulo-producto')[0].innerText;
     var precio = item.getElementsByClassName('precio-producto')[0].innerText;
+    var codigo = item.getElementsByClassName('codigo-producto')[0].innerText;
     var imagenSrc = item.getElementsByClassName('img-producto')[0].src;
     console.log(imagenSrc);
 
-    agregarItemAlCarrito(titulo, precio, imagenSrc);
+    agregarItemAlCarrito(titulo, precio, imagenSrc, codigo);
 
     hacerVisibleCarrito();
 }
 
 function check_login(userLog){
     if (userLog === true){   
-        document.getElementById('nav-carrito').classList.add('nav-carrito-inactivo');
+        document.getElementById('nav_carrito').classList.add('nav_carrito-inactivo');
         document.getElementById('close_session').classList.add('close_session-activo');
        
     }else{
        
-        document.getElementById('nav-carrito').classList.remove('nav-carrito-inactivo');
+        document.getElementById('nav_carrito').classList.remove('nav_carrito-inactivo');
         document.getElementById('close_session').classList.remove('close_session-activo');
     }
    
 }
 //Funciòn que agrega un item al carrito
-function agregarItemAlCarrito(titulo, precio, imagenSrc) {
+function agregarItemAlCarrito(titulo, precio, imagenSrc, codigo) {
     var item = document.createElement('div');
     item.classList.add = ('producto');
     var itemsCarrito = document.getElementsByClassName('carrito-items')[0];
 
     //controlamos que el item que intenta ingresar no se encuentre en el carrito
-    var nombresItemsCarrito = itemsCarrito.getElementsByClassName('carrito-item-titulo');
+    var nombresItemsCarrito = itemsCarrito.getElementsByClassName('carrito-item-codigo');
     for (var i = 0; i < nombresItemsCarrito.length; i++) {
-        if (nombresItemsCarrito[i].innerText == titulo) {
+        if (nombresItemsCarrito[i].innerText == codigo) {
             alert("El item ya se encuentra en el carrito");
             return;
         }
@@ -119,6 +120,7 @@ function agregarItemAlCarrito(titulo, precio, imagenSrc) {
                     <i class="fa-solid fa-plus sumar-cantidad"></i>
                 </div>
                 <span class="carrito-item-precio">${precio}</span>
+                <span class="carrito-item-codigo">${codigo}</span>
             </div>
             <button class="btn-eliminar-producto">
                 <i class="fa-solid fa-trash"></i>

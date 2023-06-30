@@ -9,12 +9,12 @@
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/static/css/style.css">
-
-    {% block customCSS %}
-    {% endblock %}
     <link rel="icon" href="/static/img/logo.ico">
-
     <title>{% block title %}{% endblock %}</title>
+
+<!-- CONFIGURACION ARCHIVO CSS -->
+    {% block customCSS%}
+    {% endblock %}
 </head>
 
 <body>
@@ -24,7 +24,7 @@
         <!---------------------------------------------------------------------------------------------->
         <header class="header">
             <!-- API DEL CLIMA -->
-            <div class="container-weather">
+            <div class="c_weather">
 
             </div>
             <!--      LOGO     -->
@@ -35,19 +35,19 @@
                         width="300px"></a>
             </div>
 
-            <div class="container-login">
-                <span id="user_activo"> {{ current_user.nombre }} </span>
+            <div class="container_login">
+                <span id="user_activo"> {{ current_user.fullname }} </span>
 
-                <div class="nav-carrito" id="nav-carrito">
+                <div class="nav_carrito" id="nav_carrito">
 
-                    <a class="nav-link toolstip" href="{{ url_for('sign_in') }}">
+                    <a class="nav_link toolstip" href="{{ url_for('sign_up') }}">
                         <i class='fa fa-user-plus'></i>
                         <span class="toolstip-box">Registro de Usuario</span>
                     </a>
 
                     <span>|</span>
 
-                    <a class="nav-link toolstip" href="{{ url_for('login') }}">
+                    <a class="nav_link toolstip" href="{{ url_for('login') }}">
                         <i class='fa fa-user'></i>
                         <span class="toolstip-box">Iniciar Sesión</span>
                     </a>
@@ -66,14 +66,16 @@
         <!---------------------------------------------------------------------------------------------->
         <!--------------------------------------SECCION BARRA DE NAVEGACION----------------------------->
         <!---------------------------------------------------------------------------------------------->
-        <nav class="nav-bar">
-            <ul class="nav-bar-link">
-                <li><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
-                <li><a class="nav-link" href="Sobre_Nosotros.html">Sobre Nosotros</a></li>
-                <li><a class="nav-link" href="contacto.html">Contacto</a></li>                
+        <nav class="nav_bar">
+            <ul class="nav_bar-link">
+                <li><a class="nav_link" href="{{ url_for('index') }}">Home</a></li>
+                <li><a class="nav_link" href="{{ url_for('sobre_nosotros') }}">Sobre Nosotros</a></li>
+                <li><a class="nav_link" href="contacto.html">Contacto</a></li>                
                 
                 {% if current_user.autorizado %}
-                <li><a class="nav-link" href="{{ url_for('agregar_producto') }}">Agregar Producto</a></li>
+                    
+                    <li><a class="nav_link" href="{{ url_for('inventario') }}">Inventario</a></li>
+                
                 {% endif %}
                 
             </ul>

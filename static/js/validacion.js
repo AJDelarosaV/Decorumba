@@ -4,17 +4,23 @@ const inputs = document.querySelectorAll("#formulario input");
 
 const expresiones = {
     usuario: /^[a-zA-Z0-9\_\-]{6,15}$/, // Letras, numeros, guion y guion_bajo
-    nombre: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
+    fullname: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
     password: /^.{6,12}$/, // 4 a 12 digitos.
     correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-    telefono: /^\d{10,13}$/ // 7 a 14 numeros.
+    telefono: /^\d{10,13}$/, // 7 a 14 numeros.
+    direccion: /^[a-zA-ZÀ-ÿ0-9\s]{1,40}$/, // Letras, espacios y numeros, pueden llevar acentos.
+    codigo_postal: /^\d{10,8}$/, // 7 a 14 numeros.
+    ciudad: /^[a-zA-ZÀ-ÿ\s]{1,40}$/ // Letras y espacios, pueden llevar acentos.
 }
 const campos = {
     usuario: false,
-    nombre: false,
+    fullname: false,
     password: false,
     correo: false,
-    telefono: false
+    telefono: false,
+    direccion: false,
+    codigo_postal: false,
+    ciudad: false
 }
 
 const validarFormulario = (e) => {
@@ -22,8 +28,8 @@ const validarFormulario = (e) => {
         case "usuario":
             validarCampo(expresiones.usuario, e.target, 'usuario')
             break;
-        case "nombre":
-            validarCampo(expresiones.nombre, e.target, 'nombre')
+        case "fullname":
+            validarCampo(expresiones.fullname, e.target, 'fullname')
             break;
 
         case "password":
@@ -38,6 +44,15 @@ const validarFormulario = (e) => {
             break;
         case "telefono":
             validarCampo(expresiones.telefono, e.target, 'telefono')
+            break;
+        case "direccion":
+            validarCampo(expresiones.direccion, e.target, 'direccion')
+            break;
+        case "codigo_postal":
+            validarCampo(expresiones.codigo_postal, e.target, 'codigo_postal')
+            break;
+        case "ciudad":
+            validarCampo(expresiones.ciudad, e.target, 'ciudad')
             break;
     }
 }
@@ -93,7 +108,7 @@ inputs.forEach((input) => {
 
 //     const terminos = document.getElementById('terminos');
 
-//     if (campos.usuario && campos.nombre && campos.password && campos.correo && campos.telefono && terminos.checked) {
+//     if (campos.usuario && campos.fullname && campos.password && campos.correo && campos.telefono && terminos.checked) {
 
 //         var nomBre = document.getElementById('nombre').value;
 //         var passWord = document.getElementById('password2').value;

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/img/logo.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="/static/js/api.js" async></script>
+    <script src="/static/js/app.js" async></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <!---------------------------------------------------------------------------------------------->
+    <!--------------------------------------SECCION HEADER------------------------------------------>
+    <!---------------------------------------------------------------------------------------------->
+    <header class="container-fluid">
+        <div class= "row">
+            
+            <div class="col-8">
+                <!--      LOGO     -->
+                <div class="row border-5">
+                    <div class="col text-center">
+                        <a href="{{ url_for('index') }}" class="logo logo1"><img src="/static/img/logo.png" alt="logo"
+                            width="100px"></a>
+                    </div>
+                    <div class="col text-center">
+                        <a href="{{ url_for('index') }}" class="logo logo2"><img src="/static/img/logo2.png" alt="logo-nombre"
+                            width="300px"></a>
+                    </div>
+                   
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="container_login">
+                    <span id="user_activo"> {{ current_user.fullname }} </span>
+    
+                    <div class="nav_carrito" id="nav_carrito">
+    
+                        <a class="nav_link toolstip" href="{{ url_for('sign_up') }}">
+                            <i class='fa fa-user-plus'></i>
+                            <span class="toolstip-box">Registro de Usuario</span>
+                        </a>
+    
+                        <span>|</span>
+    
+                        <a class="nav_link toolstip" href="{{ url_for('login') }}">
+                            <i class='fa fa-user'></i>
+                            <span class="toolstip-box">Iniciar Sesión</span>
+                        </a>
+    
+                    </div>
+                    <!-- <form action="/templates/index.html" id="close_session" class="close_session">
+                        <button type="submit" id="btn_close_session" class="btn_close_session">Cerrar Sesion</button>
+                    </form> -->
+                    <div class="close_session" id="close_session">
+                        <a class="btn_close_session nav_link" id="btn_close_session" href="{{url_for('logout')}}">Cerrar Sesión</a>
+                    </div>
+    
+                </div>
+            </div>
+
+        </div>
+    </header>
+    <!---------------------------------------------------------------------------------------------->
+    <!--------------------------------------SECCION BARRA DE NAVEGACION----------------------------->
+    <!---------------------------------------------------------------------------------------------->
+    <nav class="nav_bar pt-3">
+        <ul class="nav_bar-link">
+            <li><a class="nav_link" href="{{ url_for('index') }}">Home</a></li>
+            <li><a class="nav_link" href="{{ url_for('sobre_nosotros') }}">Sobre Nosotros</a></li>
+            <li><a class="nav_link" href="contacto.html">Contacto</a></li>
+
+            {% if current_user.autorizado %}
+
+            <li><a class="nav_link" href="{{ url_for('inventario') }}">Inventario</a></li>
+
+            {% endif %}
+
+        </ul>
+    </nav>
+    <!---------------------------------------------------------------------------------------------->
+    <!--------------------------------------SECCION DE CONTENIDO------------------------------------>
+    <!---------------------------------------------------------------------------------------------->
+    <h1 class="text-center mt-5 nb-5 text-primary">Control de Inventario</h1>
+    <div class="container mb-4">
+        <div class="">
+            <div class="card-body">
+                <form action="/producto" method="POST">
+                    <div class="row mb-3 shadow">
+                        <div class="col">
+                            <label for="">Código</label>
+                            <input type="text" class="form-control mb-3" name="codigo">
+                        </div>
+                        <div class="col">
+                            <label for="">Nombre</label>
+                            <input type="text" class="form-control mb-3" name="nombre">
+                        </div>
+                        <div class="col">
+                            <label for="">Precio</label>
+                            <input type="text" class="form-control mb-3" name="precio">
+                        </div>
+                        <div class="col">
+                            <label for="">Stock</label>
+                            <input type="text" class="form-control mb-3" name="stock">
+                        </div>
+                    </div>
+                    <div class="row mb-3 shadow">
+                        <div class="col">
+                            <label for="">Ruta de la Imagen</label>
+                            <input type="text" class="form-control mb-3" name="src">
+                        </div>
+                        <!-- <div class="col">
+                            <img src="" alt="" class="form-control mb-3">
+                        </div> -->
+                    </div>
+                    <div class="row mb-3 shadow">
+                        <div class="col">
+                            <label for="">Descripcion</label>
+                            <input type="text" class="form-control mb-3" name="descripcion">
+                        </div>
+
+                    </div>
+                    <div class="row mb-3 shadow">
+                        <div class="col">
+                            <label for="">Categoria</label>
+                            <select name="categoria" id="" class="form-control mb-3">
+                                <option value="" selected>Ninguno</option>
+                                <option value="Piñatas">Piñatas</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="">Marca</label>
+                            <select name="marca" id="" class="form-control mb-3">
+                                <option value="" selected>Ninguno</option>
+                                <option value="Decorumba">Decorumba</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="">Tamaño</label>
+                            <select name="tamanio" id="" class="form-control mb-3">
+                                <option value="" selected>Ninguno</option>
+                                <option value="50cm">50cm</option>
+                                <option value="70cm">70cm</option>
+                                <option value="90cm">90cm</option>
+
+                            </select>
+                        </div>
+
+                        <div class="col">
+                            <button class="btn btn-primary mb-3 mt-4 w-100" type="submit">Guardar</button>
+                        </div>
+                        
+                    </div>
+
+                </form>
+
+                <!-- Tabla -->
+                <table class="table table-bordered table-info border-secondary">
+                    <thead>
+                        <th scope="col" class="bg-secondary">Código</th>
+                        <th scope="col" class="bg-secondary">Nombre</th>
+                        <th scope="col" class="bg-secondary">Descripcion</th>
+                        <th scope="col" class="bg-secondary">Precio</th>
+                        <th scope="col" class="bg-secondary">Stock</th>
+                        <th scope="col" class="bg-secondary">Categoria</th>
+                        <th scope="col" class="bg-secondary">Marca</th>
+                        <th scope="col" class="bg-secondary">Tamaño</th>
+
+                        <th scope="col" class="bg-secondary">Editar</th>
+                        <th scope="col" class="bg-secondary">Borrar</th>
+
+                    </thead>
+
+                    <tbody>
+                        {% for d in data %}
+                        <tr>
+                            <td>{{d.cod}}</td>
+                            <td>{{d.nombre}}</td>
+                            <td>{{d.descripcion}}</td>
+                            <td>{{d.precio}}</td>
+                            <td>{{d.stock}}</td>
+                            <td>{{d.categoria}}</td>
+                            <td>{{d.marca}}</td>
+                            <td>{{d.tamanio}}</td>
+
+                            <td><button class="btn btn-primary btn-sm" id="btn-edit{{d.cod}}" data-bs-toggle="modal"
+                                    data-bs-target="#modal{{d.cod}}">Editar</button></td>
+                            <td><a href="{{url_for('borrar', cod= d.cod)}}" class="btn btn-danger btn-sm">Borrar</a>
+                            </td>
+                        </tr>
+
+                        <!-- VENTANA MODAL -->
+                        <div class="modal fade" tabindex="-1" role="dialog" id="modal{{d.cod}}">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content rounded-4 shadow">
+                                    <div class="modal-header border-bottom-0">
+                                        <h1 class="modal-title fs-5">Codigo: {{d.cod}}</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body py-0">
+                                        <form action="/producto/{{d.cod}}" method="POST">
+                                            <div class="row mb-1">
+                                                <div class="col">
+                                                    <label>Nombre</label>
+                                                    <input type="text" class="form-control mb-1" name="nombre"
+                                                        value="{{d.nombre}}">
+                                                </div>
+                                            </div>
+                                            <div class="row mb-1">
+                                                
+                                                <div class="col">
+                                                    <label>Precio</label>
+                                                    <input type="text" class="form-control mb-1" name="precio"
+                                                        value="{{d.precio}}">
+                                                </div>
+                                                <div class="col">
+                                                    <label>Stock</label>
+                                                    <input type="text" class="form-control mb-1" name="stock"
+                                                        value="{{d.stock}}">
+                                                </div>
+                                            </div>
+                                            <div class="row mb-1">
+                                                <div class="col">
+                                                    <label>Ruta de la Imagen</label>
+                                                    <input type="text" class="form-control mb-1" name="src"
+                                                        value="{{d.src}}">
+                                                </div>
+                                                <!-- <div class="col">
+                                                    <img src="" alt="" class="form-control mb-1">
+                                                </div> -->
+                                            </div>
+                                            <div class="row mb-1">
+                                                <div class="col">
+                                                    <label>Descripcion</label>
+                                                    <input type="text" class="form-control mb-1" name="descripcion"
+                                                        value="{{d.descripcion}}">
+                                                </div>
+
+                                            </div>
+                                            <div class="row mb-1">
+                                                <div class="col">
+                                                    <label>Categoria</label>
+                                                    <input type="text" class="form-control mb-1" name="categoria"
+                                                        value="{{d.categoria}}">
+                                                </div>
+                                                <div class="col">
+                                                    <label>Marca</label>
+                                                    <input type="text" class="form-control mb-1" name="marca"
+                                                        value="{{d.marca}}">
+                                                </div>
+                                                <div class="col">
+                                                    <label>Tamaño</label>
+                                                    <input type="text" class="form-control mb-1" name="tamanio"
+                                                        value="{{d.tamanio}}">
+                                                </div>
+
+
+
+                                            </div>
+
+
+                                    </div>
+                                    <div
+                                        class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+                                        <button type="submit" class="btn btn-lg btn-primary">Guardar Cambios</button>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!---------------------------------------------------------------------------------------------->
+    <!--------------------------------------SECCION FOOTER / PIE DE PAGINA-------------------------->
+    <!---------------------------------------------------------------------------------------------->
+    <footer class="footer">
+        <div class="footer-nav">
+            <div class="footer-mg-contenedor">
+                <h4>Navegación</h4>
+                <ul class="list-mg">
+                    <li>
+                        <a href="{{ url_for('index') }}">Productos</a>
+                    </li>
+                    <li>
+                        <a href="/templates/about_us/Sobre_Nosotros.html">Sobre Nosotros</a>
+                    </li>
+                    <li>
+                        <a href="/templates/contacto/contacto.html">Contacto</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="footer-mg-contenedor">
+                <h4>Contactanos</h4>
+                <ul class="list-mg">
+                    <li><a href="https://wa.me/5491137673836">+541137673836</a></li>
+                    <li><a href="mailto:decorumbas@gmail.com">Escríbenos</a></li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="footer-medios">
+            <div class="footer-medios-contenedor1">
+                <h4>Medios de Pago</h4>
+                <div class="container-img-pagos">
+                    <img src="/static/img/medios de pago/visa@2x.png" alt="Visa" class="img-wd">
+                    <img src="/static/img/medios de pago/mastercard@2x.png" alt="MasterCard" class="img-wd">
+                    <img src="/static/img/medios de pago/amex@2x.png" alt="AmericanExpress" class="img-wd">
+                    <img src="/static/img/medios de pago/mercadopago@2x.png" alt="MercadoPago" class="img-wd">
+                    <img src="/static/img/medios de pago/tarjeta-naranja@2x.png" alt="Naranja" class="img-wd">
+                    <img src="/static/img/medios de pago/argencard@2x.png" alt="ArgenCard" class="img-wd">
+                    <img src="/static/img/medios de pago/banelco@2x.png" alt="Banelco" class="img-wd">
+                    <img src="/static/img/medios de pago/cabal@2x.png" alt="Cabal" class="img-wd">
+                    <img src="/static/img/medios de pago/cencosud@2x.png" alt="Cencosud" class="img-wd">
+                    <img src="/static/img/medios de pago/diners@2x.png" alt="DinersClub" class="img-wd">
+                    <img src="/static/img/medios de pago/pagofacil@2x.png" alt="PagoFácil" class="img-wd">
+                    <img src="/static/img/medios de pago/rapipago@2x.png" alt="RapiPago" class="img-wd">
+                    <img src="/static/img/medios de pago/tarjeta-shopping@2x.png" alt="ShoppingCard" class="img-wd">
+                </div>
+            </div>
+            <div class="footer-medios-contenedor2">
+                <h4>Formas de Envíos</h4>
+                <div class="container-img-envios">
+                    <img src="/static/img/medios de envios/correoargentino.png" alt="CorreoArgentino" class="img-wd">
+                    <img src="/static/img/medios de envios/andreani.png" alt="Andreani" class="img-wd">
+                    <img src="/static/img/medios de envios/oca.png" alt="OCA" class="img-wd">
+                </div>
+            </div>
+        </div>
+        <div class="footer-direccion">
+            <h4>Dirección</h4>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6579.277235052683!2d-58.915957420343375!3d-34.46132035076408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bc9cd1e5b542c7%3A0x15c9f39551b5c4fc!2sPlaza%2012%20de%20octubre!5e0!3m2!1ses-419!2sar!4v1684536554449!5m2!1ses-419!2sar"
+                width="450" height="200" style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </footer>
+    <!---------------------------------------------------------------------------------------------->
+    <!--------------------------------------SECCION COPY-RIGHT------------------------------------------>
+    <!---------------------------------------------------------------------------------------------->
+    <div class="copy-right">
+        <span><i class="fa fa-copyright" aria-hidden="true"></i>DecoRumbas 2023 - Codo a Codo</span>
+    </div>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,4 +1,4 @@
-const result = document.querySelector('.container-weather');
+const result = document.querySelector('.c_weather');
 
 const nameCity = document.querySelector('#city');
 

@@ -2,16 +2,18 @@ from flask_login import UserMixin
 
 class User(UserMixin):
 
-    def __init__(self, id, autorizado,  username, password, nombre= '', apellido='', email='',  fecha_creacion='', fecha_actualizacion='') -> None:
+    def __init__(self, id, username, password, fullname= '', telefono='', email='', direccion= '', cp= '', ciudad= '', fecha_creacion='', autorizado= 0) -> None:
         self.id = id
-        self.autorizado = autorizado
         self.username = username
         self.password = password
-        self.nombre = nombre
-        self.apellido = apellido
+        self.fullname = fullname
+        self.telefono = telefono
         self.email = email
+        self.direccion= direccion
+        self.cp= cp
+        self.ciudad= ciudad
         self.fecha_creacion = fecha_creacion
-        self.fecha_actualizacion = fecha_actualizacion
+        self.autorizado= autorizado
         
     
     @classmethod
