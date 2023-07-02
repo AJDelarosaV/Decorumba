@@ -109,6 +109,8 @@ function agregarItemAlCarrito(titulo, precio, imagenSrc, codigo) {
         }
     }
 
+        
+
     var itemCarritoContenido = `
         <div class="carrito-item">
             <img src="${imagenSrc}" width="80px" alt="">
@@ -141,6 +143,7 @@ function agregarItemAlCarrito(titulo, precio, imagenSrc, codigo) {
     var botonSumarCantidad = item.getElementsByClassName('sumar-cantidad')[0];
     botonSumarCantidad.addEventListener('click', sumarCantidad);
 
+    agregar_carrito(codigo, titulo, precio);
     //Actualizamos total
     actualizarTotalCarrito();
 }
@@ -240,5 +243,46 @@ function actualizarTotalCarrito() {
     total = Math.round(total * 100) / 100;
 
     document.getElementsByClassName('carrito-precio-total')[0].innerText = '$' + total.toLocaleString("es") + ",00";
+
+}
+//Funcion para agregar a la base de datos
+function agregar_carrito(codigo, titulo, precio){
+
+    //Agregamos el item a la base de datos carrito
+    const URL= 'http://127.0.0.1:5000/';
+
+    // Creamos un objeto con los datos del producto
+    var producto = {
+    codigo,
+    titulo,
+    'cantidad': 1,
+    precio
+    };
+
+    fetch(URL + 'carrito', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(producto)
+    })
+        .then(function (response) {
+            // Código para manejar la respuesta
+            if (response.ok) {
+                return response.json(); // Parseamos la respuesta JSON
+            } else {
+                // Si hubo un error, lanzar explícitamente una excepción
+                // para ser "catcheada" más adelante
+                throw new Error('Error al obtener respuesta.');
+            }
+        })
+        .then(function (data) {
+            alert('Producto agregado correctamente.');
+            
+        })
+        .catch(function (error) {
+            // Código para manejar errores
+            alert('Error al agregar el producto.');
+        });
 
 }

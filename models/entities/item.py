@@ -1,7 +1,7 @@
 
 class Item:
 
-        def __init__(self, cod=1, nombre= '', descripcion= '', precio= 0,  stock = 0, src= '', categoria = 1, marca = 1, tamanio = 1) -> None:
+        def __init__(self, cod='', nombre= '', descripcion= '', precio= 0,  stock = 0, src= '', categoria = 1, marca = 1, tamanio = 1) -> None:
                 self.cod = cod
                 self.nombre = nombre
                 self.descripcion = descripcion

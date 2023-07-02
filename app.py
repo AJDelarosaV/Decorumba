@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, flash,jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash,jsonify, json
 from flask_mysqldb import MySQL
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from datetime import datetime
+from flask_cors import CORS
 
 
 from config import config
@@ -9,10 +10,12 @@ from config import config
 #Models
 from models.ModelsUser import ModelUser
 from models.ModelsItems import ModelItems
+from models.ModelsCarrito import ModelCarrito
 
 #Entities
 from models.entities.user import User
 from models.entities.item import Item
+from models.entities.carrito import ItemCarrito
 
 
 
@@ -20,6 +23,7 @@ from models.entities.item import Item
 
 
 app = Flask(__name__)
+CORS(app)
 db = MySQL(app)
 login_manager_app= LoginManager(app)
 
@@ -192,11 +196,11 @@ def carrito():
         carrito= {'id': fila[0], 'nombre': fila[1], 'cantidad':fila[2], 'precio':fila[3]}
         carro.append(carrito)
 
-    return jsonify({'carrito': carro, 'mensaje':'Listado de la base de datos carrito'})
+    return jsonify({'carrito': carro, 'mensaje':'Listado de la base de datos carrito'}), 200
 
 #CONSULTA ITEM CARRITO
 @app.route('/carrito/<int:cod>', methods= ['GET'])
-def check_item_carrito(cod):
+def consulta_carrito(cod):
     cursor = db.connection.cursor()
     cursor.execute(f'SELECT * FROM carrito WHERE id= {cod}')
     row = cursor.fetchone()
@@ -204,19 +208,41 @@ def check_item_carrito(cod):
     id_item, nombre, cantidad, precio = row
     carro = {'id': id_item, 'nombre': nombre, 'cantidad': cantidad, 'precio':precio}
 
-    return jsonify({'carrito': carro, 'mensaje':'Consulta realizada con exito'}), 200
+    return jsonify({'carrito': carro, 'mensaje':'Consulta realizada con exito', 'status': True}), 200
 
-#MODIFICAR CANTIDAD DE ITEM EN CARRITO
+#AGREGAR  ITEM AL CARRITO
+@app.route('/carrito', methods= ['POST'])
+def agregar_carrito():
+    cod = request.json.get('codigo')
+    item = ModelItems.check_producto_db(db, cod)
+    if item is not None:
+        is_add = ModelCarrito.agregar(db, item)
+        
+        if is_add:
+            return jsonify({'message':'Item agregado al carrito'}), 200
+        else:
+            return jsonify({'message':'Stock insuficiente para agregar'}), 404
+
+    
+
+#AUMENTAR CANTIDAD DE ITEM EN CARRITO
 @app.route('/carrito/<int:cod>', methods= ['PUT'])
-def agregar_carrito(cod):
-    return 'En construccion'
+def aumentar_cantidad_carrito(cod):
+    
+    is_carrito= ItemCarrito.consulta_carrito(db, cod)   
+    if is_carrito is not None:
+        item = ModelItems.check_producto_db(db, cod)
+        ModelCarrito.aumentar(db, is_carrito, item)
+        return jsonify({'mensaje':'Se modifico el producto en el carrito', 'status': True }), 200
 
-#MODIFICAR CANTIDAD DE ITEM EN CARRITO
-@app.route('/carrito/<int:cod>', methods= ['PUT'])
-def modificar_cantidad_carrito(cod):
-    pass
 
-
+#RESTAR CANTIDAD DE ITEM EN CARRITO
+@app.route('/carrito/<int:cod>', methods= ['DELETE'])
+def restar_cantidad_carrito(cod):
+    is_carrito= ItemCarrito.consulta_carrito(db, cod)   
+    if is_carrito is not None:
+        ModelCarrito.restar(db, is_carrito)
+        return jsonify({'mensaje':'Se modifico el producto en el carrito', 'status': True }), 200
 
 """
 ###########################################################
