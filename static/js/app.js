@@ -5,14 +5,17 @@ var is_active = document.getElementById('user_activo').innerText;
 //URL para obtencion y envio de datos a la base de datos
 const URL= 'http://127.0.0.1:5000/';
 
-if (is_active !== ''){
-    userLog = true;
-}else{
-    userLog = false;
-}
+//comprobamos si hay item en el carrito
+comprobar_items_carrito();
 
 //Cargamos y comprobamos datos del usuario si ya inicio sesion
-check_login(userLog);
+if (is_active !== ''){
+    userLog = true;
+    check_login(userLog);
+}else{
+    userLog = false;
+    check_login(userLog);
+}
 
 //Espermos que todos los elementos de la página cargen para ejecutar el script
 if (document.readyState == 'loading') {
@@ -33,7 +36,7 @@ function ready() {
     //     document.getElementById('nav_carrito').classList.remove('nav_carrito-inactivo');
     //     document.getElementById('close_session').classList.remove('close_session-activo');
     // }
-
+    
     //Agregamos funcionalidad al boton Agregar al carrito
     var botonesAgregarAlCarrito = document.getElementsByClassName('btn-agregar-producto');
     for (var i = 0; i < botonesAgregarAlCarrito.length; i++) {
@@ -63,12 +66,16 @@ function ready() {
     }
     
     //Agregamos funcionalidad al botón comprar
-    document.getElementsByClassName('btn-pagar')[0].addEventListener('click', pagarClicked)
+    document.getElementsByClassName('btn-pagar')[0].addEventListener('click', pagarClicked);
 
     //Agregamos funcionalidad al botón cerrar sesion
-    document.getElementById('btn_close_session').addEventListener('click', closeSession)
+    document.getElementById('btn_close_session').addEventListener('click', closeSession);
+    
+    
 
 }
+
+
 //Función para el boton click de agregar al carrito
 function agregarAlCarritoClicked(event) {
     var button = event.target;
@@ -78,12 +85,12 @@ function agregarAlCarritoClicked(event) {
     var codigo = item.getElementsByClassName('codigo-producto')[0].innerText;
     var imagenSrc = item.getElementsByClassName('img-producto')[0].src;
     // console.log(imagenSrc);
-
+    agregar_carrito(codigo, titulo, precio, imagenSrc);
     agregarItemAlCarrito(titulo, precio, imagenSrc, codigo);
 
     hacerVisibleCarrito();
 }
-
+//Función para comprobar usuario
 function check_login(userLog){
     if (userLog === true){   
         document.getElementById('nav_carrito').classList.add('nav_carrito-inactivo');
@@ -145,7 +152,8 @@ function agregarItemAlCarrito(titulo, precio, imagenSrc, codigo) {
     var botonSumarCantidad = item.getElementsByClassName('sumar-cantidad')[0];
     botonSumarCantidad.addEventListener('click', sumarCantidad);
 
-    agregar_carrito(codigo, titulo, precio);
+    // agregar_carrito(codigo, titulo, precio);
+    
     //Actualizamos total
     actualizarTotalCarrito();
 }
@@ -243,7 +251,6 @@ function actualizarTotalCarrito() {
         //quitamos el simobolo peso y el punto de milesimos.
         var precio = parseFloat(precioElemento.innerText.replace('$', '').replace('.', ''));
         var cantidadItem = item.getElementsByClassName('carrito-item-cantidad')[0];
-        console.log(precio);
         var cantidad = cantidadItem.value;
         total = total + (precio * cantidad);
     }
@@ -253,14 +260,15 @@ function actualizarTotalCarrito() {
 
 }
 //Funcion para agregar producto a la base de datos ''carrito''
-function agregar_carrito(codigo, titulo, precio){
+function agregar_carrito(codigo, titulo, precio, imagenSrc){
 
     // Creamos un objeto con los datos del producto
     var producto = {
     codigo,
     titulo,
     'cantidad': 1,
-    precio
+    precio,
+    imagenSrc
     };
 
     fetch(URL + 'carrito', {
@@ -316,10 +324,7 @@ function eliminar_carrito(codigo){
                 throw new Error('Error al obtener respuesta.');
             }
         })
-        // .then(function (data) {
-        //     alert('Producto eliminado correctamente.');
-            
-        // })
+
         .catch(function (error) {
             // Código para manejar errores
             alert('Error al agregar el producto.');
@@ -400,3 +405,40 @@ function restar_cantidad(codigo){
         });
 
 }
+//Función para el boton click de agregar al carrito
+function comprobar_items_carrito(){
+
+
+    fetch(URL + 'carrito')
+        .then(function (response) {
+            // Código para manejar la respuesta
+            if (response.ok) {
+                return response.json(); // Parseamos la respuesta JSON
+            } else {
+                // Si hubo un error, lanzar explícitamente una excepción
+                // para ser "catcheada" más adelante
+                throw new Error('Error al obtener respuesta.');
+            }
+        }).then(dataJSON => {
+            if (dataJSON.cod === '404') {
+                console.log('No encontrado ');
+            } else {
+               
+                // console.log(dataJSON.carrito[0].nombre)
+                for (let i=0; i < dataJSON.carrito.length; i++){
+                    
+                    agregarItemAlCarrito(dataJSON.carrito[i].nombre,dataJSON.carrito[i].precio, dataJSON.carrito[i].imagenSrc, dataJSON.carrito[i].id)
+                }
+                
+            }
+                            //console.log(dataJSON);
+        })
+        .catch(function (error) {
+            // Código para manejar errores
+            alert('Error al agregar el producto.');
+        });
+
+    
+
+}
+

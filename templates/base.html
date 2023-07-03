@@ -36,7 +36,7 @@
             </div>
 
             <div class="container_login">
-                <span id="user_activo"> {{ current_user.fullname }} </span>
+                <span id="user_activo"> {{ current_user.fullname }}</span>
 
                 <div class="nav_carrito" id="nav_carrito">
 
@@ -51,6 +51,7 @@
                         <i class='fa fa-user'></i>
                         <span class="toolstip-box">Iniciar Sesión</span>
                     </a>
+                    
 
                 </div>
                 <!-- <form action="/templates/index.html" id="close_session" class="close_session">
@@ -59,7 +60,7 @@
                 <div class="close_session" id="close_session">
                     <a class="btn_close_session" id="btn_close_session" href="{{url_for('logout')}}">Cerrar Sesión</a>
                 </div>
-
+                
             </div>
 
         </header>
@@ -70,14 +71,16 @@
             <ul class="nav_bar-link">
                 <li><a class="nav_link" href="{{ url_for('index') }}">Home</a></li>
                 <li><a class="nav_link" href="{{ url_for('sobre_nosotros') }}">Sobre Nosotros</a></li>
-                <li><a class="nav_link" href="contacto.html">Contacto</a></li>                
+                <li><a class="nav_link" href="contacto.html">Contacto</a></li> 
+                
+                            
                 
                 {% if current_user.autorizado %}
                     
                     <li><a class="nav_link" href="{{ url_for('inventario') }}">Inventario</a></li>
                 
                 {% endif %}
-                
+                <li><i class="fa-solid fa-shop" onclick="hacerVisibleCarrito()" style="cursor: pointer;"></i></li>    
             </ul>
         </nav>
         <!---------------------------------------------------------------------------------------------->

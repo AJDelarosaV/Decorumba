@@ -384,11 +384,19 @@ body{
     margin-right: -100%;
     opacity: 0;
 }
+.close_carrito{
+    cursor: pointer;
+    width: 50px;
+    height: auto;
+}
 .container-carrito .header-carrito{
     background-color: rgb(233, 236, 18, 0.5);
     color: rgb(30, 61, 236);
     text-align: center;
-    padding: 30px 0;
+    padding: 30px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
 .container-carrito .carrito-item{
     display: flex;

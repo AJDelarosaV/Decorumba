@@ -13,25 +13,25 @@ for (var i = 0; i < contProducto.length; i++) {
 //////PROXIMAMENTE///////////
 ////////////////////////////////////////
 
-function callProductos(){
-    const url = 'http://127.0.0.1:5000/carrito';
+// function callProductos(){
+//     const url = 'http://127.0.0.1:5000/carrito';
      
-    fetch(url)
-            .then(data => {
-                return data.json();
-            })
-            .then(dataJSON => {
-                if (dataJSON.cod === '404') {
-                    console.log('Ciudad no encontrada...');
-                } else {
+//     fetch(url)
+//             .then(data => {
+//                 return data.json();
+//             })
+//             .then(dataJSON => {
+//                 if (dataJSON.cod === '404') {
+//                     console.log('Ciudad no encontrada...');
+//                 } else {
                     
-                    console.log(dataJSON);
-                }
-                //console.log(dataJSON);
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }
+//                     console.log(dataJSON);
+//                 }
+//                 //console.log(dataJSON);
+//             })
+//             .catch(error => {
+//                 console.log(error);
+//             })
+//     }
 
-callProductos();
+// callProductos();

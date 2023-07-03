@@ -49,8 +49,8 @@ class ModelCarrito:
 
         if item.stock >= 1:
             cursor= db.connection.cursor()
-            sql= "INSERT INTO carrito (id, nombre_item, cantidad, precio, cod_usuario) VALUES (%s, %s, %s, %s, %s)"
-            data =(item.cod, item.nombre, 1, item.precio, 0)
+            sql= "INSERT INTO carrito (id, nombre_item, cantidad, precio, imagenSrc, cod_usuario) VALUES (%s, %s, %s, %s, %s, %s)"
+            data =(item.cod, item.nombre, 1, item.precio, item.src, 0)
             cursor.execute(sql, data)
             db.connection.commit()
 

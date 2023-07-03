@@ -193,7 +193,7 @@ def carrito():
     carro = []
 
     for fila in row:
-        carrito= {'id': fila[0], 'nombre': fila[1], 'cantidad':fila[2], 'precio':fila[3]}
+        carrito= {'id': fila[0], 'nombre': fila[1], 'cantidad':fila[2], 'precio':fila[3], 'imagenSrc':fila[4]}
         carro.append(carrito)
 
     return jsonify({'carrito': carro, 'mensaje':'Listado de la base de datos carrito'}), 200
@@ -205,10 +205,10 @@ def consulta_carrito(cod):
     cursor.execute(f'SELECT * FROM carrito WHERE id= {cod}')
     row = cursor.fetchone()
 
-    id_item, nombre, cantidad, precio = row
-    carro = {'id': id_item, 'nombre': nombre, 'cantidad': cantidad, 'precio':precio}
+    id_item, nombre, cantidad, precio, imagenSrc = row
+    carro = {'id': id_item, 'nombre': nombre, 'cantidad': cantidad, 'precio':precio, 'imagenSrc': imagenSrc}
 
-    return jsonify({'carrito': carro, 'mensaje':'Consulta realizada con exito', 'status': True}), 200
+    return jsonify({'carrito': carro, 'mensaje':'Consulta realizada con exito'}), 200
 
 #AGREGAR  ITEM AL CARRITO
 @app.route('/carrito', methods= ['POST'])
@@ -247,7 +247,7 @@ def modificar_cantidad_carrito(cod):
         ModelCarrito.modificar(db, is_carrito, item, cantidad)
         return jsonify({'mensaje':'Se modifico el producto en el carrito'}), 200
 
-        
+
 """
 ###########################################################
 CONFIGURACION DE RUTAS PARA PAGINA SOBRE NOSOTROS
