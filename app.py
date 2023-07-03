@@ -223,27 +223,31 @@ def agregar_carrito():
         else:
             return jsonify({'message':'Stock insuficiente para agregar'}), 404
 
-    
 
-#AUMENTAR CANTIDAD DE ITEM EN CARRITO
-@app.route('/carrito/<int:cod>', methods= ['PUT'])
-def aumentar_cantidad_carrito(cod):
+#ELIMINAR PRODUCTO DE LA BASE DE DATOS CARRITO
+@app.route('/carrito/<int:cod>', methods= ['DELETE'])
+def eliminar_carrito(cod):
+    is_carrito= ItemCarrito.consulta_carrito(db, cod)   
     
+    if is_carrito is not None:
+        is_borrado= ModelCarrito.eliminar(db, is_carrito)
+        if is_borrado:
+            return jsonify({'messsage':'Se elimino el producto en el carrito'}), 200
+        else:
+            return jsonify({'message':'El item no existe en el carrito'}), 404
+   
+#AUMENTAR y  RESTAR CANTIDAD DE ITEM EN CARRITO
+@app.route('/carrito/<int:cod>', methods= ['PUT'])
+def modificar_cantidad_carrito(cod):
+    
+    cantidad = request.json.get('cantidad')
     is_carrito= ItemCarrito.consulta_carrito(db, cod)   
     if is_carrito is not None:
         item = ModelItems.check_producto_db(db, cod)
-        ModelCarrito.aumentar(db, is_carrito, item)
-        return jsonify({'mensaje':'Se modifico el producto en el carrito', 'status': True }), 200
+        ModelCarrito.modificar(db, is_carrito, item, cantidad)
+        return jsonify({'mensaje':'Se modifico el producto en el carrito'}), 200
 
-
-#RESTAR CANTIDAD DE ITEM EN CARRITO
-@app.route('/carrito/<int:cod>', methods= ['DELETE'])
-def restar_cantidad_carrito(cod):
-    is_carrito= ItemCarrito.consulta_carrito(db, cod)   
-    if is_carrito is not None:
-        ModelCarrito.restar(db, is_carrito)
-        return jsonify({'mensaje':'Se modifico el producto en el carrito', 'status': True }), 200
-
+        
 """
 ###########################################################
 CONFIGURACION DE RUTAS PARA PAGINA SOBRE NOSOTROS
