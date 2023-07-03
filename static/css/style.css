@@ -244,7 +244,7 @@ body{
 }
 .contenido .container-contenido .container-productos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     justify-items: center;
     align-content: center;
    
@@ -281,7 +281,7 @@ body{
     font-weight: bold;
     text-align: center;
     text-transform: uppercase;
-    font-size: 1.3vw;
+    font-size: 1vw;
     height: 30px;
 }
 .contenido .container-contenido .container-productos .producto .precio-producto {
