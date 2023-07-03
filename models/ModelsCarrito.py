@@ -4,22 +4,45 @@
 class ModelCarrito:
 
     @classmethod
-    def aumentar(self, db, itemcarrito, item):
-        if item.stock >= 1:
-            cursor= db.connection.cursor()
-            sql= f"UPDATE carrito SET cantidad= cantidad + 1 WHERE id= {itemcarrito.cod}"
-            cursor.execute(sql)
-            db.connection.commit()
-            cursor.close()
+    def modificar(self, db, itemcarrito, item, cantidad):
+        if cantidad > 0:
+            if item.stock >= 1:
+                cursor= db.connection.cursor()
+                sql= f"UPDATE carrito SET cantidad= cantidad + {cantidad} WHERE id= {itemcarrito.cod}"
+                cursor.execute(sql)
+                db.connection.commit()
+
+                sql= f"UPDATE productos SET stock= stock - {cantidad} WHERE cod= {itemcarrito.cod}"
+                cursor.execute(sql)
+                db.connection.commit()
+                cursor.close()
+                return True
+            else:
+                return False
         else:
-            return False
+            if itemcarrito.cantidad > 1:
+                cursor= db.connection.cursor()
+                sql= f"UPDATE carrito SET cantidad= cantidad + {cantidad} WHERE id= {itemcarrito.cod}"
+                cursor.execute(sql)
+                db.connection.commit()
 
-        sql= f"UPDATE productos SET stock= stock - 1 WHERE cod= {itemcarrito.cod}"
-        cursor.execute(sql)
-        db.connection.commit()
-        cursor.close()
+                sql= f"UPDATE productos SET stock= stock - {cantidad} WHERE cod= {itemcarrito.cod}"
+                cursor.execute(sql)
+                db.connection.commit()
+                cursor.close()
+                return True
+            elif itemcarrito.cantidad==1:
+                cursor= db.connection.cursor()
+                sql= f"DELETE FROM carrito WHERE id= {itemcarrito.cod}"
+                cursor.execute(sql)
+                db.connection.commit()
 
-        return True
+                sql= f"UPDATE productos SET stock= stock - {cantidad} WHERE cod= {itemcarrito.cod}"
+                cursor.execute(sql)
+                db.connection.commit()
+                cursor.close()
+                return True
+            
 
     @classmethod
     def agregar(self, db, item):
@@ -30,13 +53,38 @@ class ModelCarrito:
             data =(item.cod, item.nombre, 1, item.precio, 0)
             cursor.execute(sql, data)
             db.connection.commit()
+
+            sql= "UPDATE productos SET stock= stock - 1 WHERE cod= %s"
+            data =(item.cod,)
+            cursor.execute(sql, data)
+            db.connection.commit()
+            cursor.close()
+            return True
+
         else:
             return False
 
-        sql= "UPDATE productos SET stock= stock - 1 WHERE cod= %s"
-        data =(item.cod,)
-        cursor.execute(sql, data)
-        db.connection.commit()
-        cursor.close()
+        
+    
+    @classmethod
+    def eliminar(self, db, item):
+        try:
+            
+            cursor= db.connection.cursor()
+            sql= "DELETE FROM carrito WHERE id= %s"
+            data= (item.cod,)
+            cursor.execute(sql, data)
+            db.connection.commit()
 
-        return True
+            sql= "UPDATE productos SET stock= stock + %s WHERE cod= %s"
+            data2 =(item.cantidad, item.cod)
+            cursor.execute(sql, data2)
+            db.connection.commit()
+            cursor.close()  
+            return True
+        
+        except Exception as ex:
+            raise Exception(ex)
+
+
+

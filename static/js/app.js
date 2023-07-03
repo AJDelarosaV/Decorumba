@@ -2,6 +2,8 @@
 var carritoVisible = false;
 var is_active = document.getElementById('user_activo').innerText;
 
+//URL para obtencion y envio de datos a la base de datos
+const URL= 'http://127.0.0.1:5000/';
 
 if (is_active !== ''){
     userLog = true;
@@ -75,7 +77,7 @@ function agregarAlCarritoClicked(event) {
     var precio = item.getElementsByClassName('precio-producto')[0].innerText;
     var codigo = item.getElementsByClassName('codigo-producto')[0].innerText;
     var imagenSrc = item.getElementsByClassName('img-producto')[0].src;
-    console.log(imagenSrc);
+    // console.log(imagenSrc);
 
     agregarItemAlCarrito(titulo, precio, imagenSrc, codigo);
 
@@ -115,6 +117,7 @@ function agregarItemAlCarrito(titulo, precio, imagenSrc, codigo) {
         <div class="carrito-item">
             <img src="${imagenSrc}" width="80px" alt="">
             <div class="carrito-item-detalles">
+                <span class="carrito-item-codigo">${codigo}</span>
                 <span class="carrito-item-titulo">${titulo}</span>
                 <div class="selector-cantidad">
                     <i class="fa-solid fa-minus restar-cantidad"></i>
@@ -122,7 +125,6 @@ function agregarItemAlCarrito(titulo, precio, imagenSrc, codigo) {
                     <i class="fa-solid fa-plus sumar-cantidad"></i>
                 </div>
                 <span class="carrito-item-precio">${precio}</span>
-                <span class="carrito-item-codigo">${codigo}</span>
             </div>
             <button class="btn-eliminar-producto">
                 <i class="fa-solid fa-trash"></i>
@@ -181,31 +183,36 @@ function pagarClicked(is_active) {
 function sumarCantidad(event) {
     var buttonClicked = event.target;
     var selector = buttonClicked.parentElement;
-    console.log(selector.getElementsByClassName('carrito-item-cantidad')[0].value);
+    var codigo = selector.parentElement.getElementsByClassName('carrito-item-codigo')[0].innerText;
     var cantidadActual = selector.getElementsByClassName('carrito-item-cantidad')[0].value;
     cantidadActual++;
     selector.getElementsByClassName('carrito-item-cantidad')[0].value = cantidadActual;
+    sumar_cantidad(codigo);
     actualizarTotalCarrito();
 }
 //Resto en uno la cantidad del elemento seleccionado
 function restarCantidad(event) {
     var buttonClicked = event.target;
     var selector = buttonClicked.parentElement;
+    var codigo = selector.parentElement.getElementsByClassName('carrito-item-codigo')[0].innerText;
     console.log(selector.getElementsByClassName('carrito-item-cantidad')[0].value);
     var cantidadActual = selector.getElementsByClassName('carrito-item-cantidad')[0].value;
     cantidadActual--;
     if (cantidadActual >= 1) {
         selector.getElementsByClassName('carrito-item-cantidad')[0].value = cantidadActual;
+        restar_cantidad(codigo);
         actualizarTotalCarrito();
     }
 }
 //Elimino el item seleccionado del carrito
 function eliminarItemCarrito(event) {
     var buttonClicked = event.target;
+    var item = buttonClicked.parentElement;
     buttonClicked.parentElement.parentElement.remove();
+    var codigo = item.getElementsByClassName('carrito-item-codigo')[0].innerText;
     //Actualizamos el total del carrito
+    eliminar_carrito(codigo);   
     actualizarTotalCarrito();
-
     //la siguiente funciòn controla si hay elementos en el carrito
     //Si no hay elimino el carrito
     ocultarCarrito();
@@ -245,11 +252,8 @@ function actualizarTotalCarrito() {
     document.getElementsByClassName('carrito-precio-total')[0].innerText = '$' + total.toLocaleString("es") + ",00";
 
 }
-//Funcion para agregar a la base de datos
+//Funcion para agregar producto a la base de datos ''carrito''
 function agregar_carrito(codigo, titulo, precio){
-
-    //Agregamos el item a la base de datos carrito
-    const URL= 'http://127.0.0.1:5000/';
 
     // Creamos un objeto con los datos del producto
     var producto = {
@@ -276,10 +280,120 @@ function agregar_carrito(codigo, titulo, precio){
                 throw new Error('Error al obtener respuesta.');
             }
         })
-        .then(function (data) {
-            alert('Producto agregado correctamente.');
+        // .then(function (data) {
+        //     alert('Producto agregado correctamente.');
             
+        // })
+        .catch(function (error) {
+            // Código para manejar errores
+            alert('Error al agregar el producto.');
+        });
+
+}
+//Funcion para eliminar producto en la base de datos ''carrito''
+function eliminar_carrito(codigo){
+
+   
+    // Creamos un objeto con los datos del producto
+    var producto = {
+    codigo
+    };
+
+    fetch(URL + 'carrito/' + codigo, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(producto)
+    })
+        .then(function (response) {
+            // Código para manejar la respuesta
+            if (response.ok) {
+                return response.json(); // Parseamos la respuesta JSON
+            } else {
+                // Si hubo un error, lanzar explícitamente una excepción
+                // para ser "catcheada" más adelante
+                throw new Error('Error al obtener respuesta.');
+            }
         })
+        // .then(function (data) {
+        //     alert('Producto eliminado correctamente.');
+            
+        // })
+        .catch(function (error) {
+            // Código para manejar errores
+            alert('Error al agregar el producto.');
+        });
+
+}
+//Funcion para sumar producto a la base de datos ''carrito''
+function sumar_cantidad(codigo){
+
+    var cantidad= 1;
+    // Creamos un objeto con los datos del producto
+    var producto = {
+    codigo,
+    cantidad
+    };
+
+    fetch(URL + 'carrito/' + codigo, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(producto)
+    })
+        .then(function (response) {
+            // Código para manejar la respuesta
+            if (response.ok) {
+                return response.json(); // Parseamos la respuesta JSON
+            } else {
+                // Si hubo un error, lanzar explícitamente una excepción
+                // para ser "catcheada" más adelante
+                throw new Error('Error al obtener respuesta.');
+            }
+        })
+        // .then(function (data) {
+        //     alert('Producto eliminado correctamente.');
+            
+        // })
+        .catch(function (error) {
+            // Código para manejar errores
+            alert('Error al agregar el producto.');
+        });
+
+}
+//Funcion para restar producto a la base de datos ''carrito''
+function restar_cantidad(codigo){
+
+    var cantidad= -1;
+    // Creamos un objeto con los datos del producto
+    var producto = {
+    codigo,
+    cantidad
+    };
+
+    fetch(URL + 'carrito/' + codigo, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(producto)
+    })
+        .then(function (response) {
+            // Código para manejar la respuesta
+            if (response.ok) {
+                return response.json(); // Parseamos la respuesta JSON
+            } else {
+                // Si hubo un error, lanzar explícitamente una excepción
+                // para ser "catcheada" más adelante
+                throw new Error('Error al obtener respuesta.');
+            }
+        })
+        // .then(function (data) {
+        //     alert('Producto eliminado correctamente.');
+            
+        // })
         .catch(function (error) {
             // Código para manejar errores
             alert('Error al agregar el producto.');
