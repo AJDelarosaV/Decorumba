@@ -94,7 +94,7 @@
     <div class="container mb-4">
         <div class="">
             <div class="card-body">
-                <form action="/producto" method="POST">
+                <form action="/producto" method="POST" enctype="multipart/form-data">
                     <div class="row mb-3 shadow">
                         <div class="col">
                             <label for="">Código</label>
@@ -116,7 +116,7 @@
                     <div class="row mb-3 shadow">
                         <div class="col">
                             <label for="">Ruta de la Imagen</label>
-                            <input type="text" class="form-control mb-3" name="src">
+                            <input type="file" class="form-control mb-3" name="src">
                         </div>
                         <!-- <div class="col">
                             <img src="" alt="" class="form-control mb-3">
