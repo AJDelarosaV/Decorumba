@@ -1,7 +1,7 @@
 //Creamos una variable global para mantener el estado de visibilidad del carro de compras.
 var carritoVisible = false;
 var is_active = document.getElementById('user_activo').innerText;
-
+var userLog = false;
 //URL para obtencion y envio de datos a la base de datos
 const URL= 'http://127.0.0.1:5000/';
 
@@ -104,7 +104,7 @@ function check_login(userLog){
    
 }
 //Funciòn que agrega un item al carrito
-function agregarItemAlCarrito(titulo, precio, imagenSrc, codigo) {
+function agregarItemAlCarrito(titulo, precio, imagenSrc, codigo, cantidad = 1) {
     var item = document.createElement('div');
     item.classList.add = ('producto');
     var itemsCarrito = document.getElementsByClassName('carrito-items')[0];
@@ -128,7 +128,7 @@ function agregarItemAlCarrito(titulo, precio, imagenSrc, codigo) {
                 <span class="carrito-item-titulo">${titulo}</span>
                 <div class="selector-cantidad">
                     <i class="fa-solid fa-minus restar-cantidad"></i>
-                    <input type="text" value="1" class="carrito-item-cantidad" disabled>
+                    <input type="text" value="${cantidad}" class="carrito-item-cantidad" disabled>
                     <i class="fa-solid fa-plus sumar-cantidad"></i>
                 </div>
                 <span class="carrito-item-precio">${precio}</span>
@@ -418,7 +418,7 @@ function comprobar_items_carrito(){
                 // Si hubo un error, lanzar explícitamente una excepción
                 // para ser "catcheada" más adelante
                 throw new Error('Error al obtener respuesta.');
-            }
+            };
         }).then(dataJSON => {
             if (dataJSON.cod === '404') {
                 console.log('No encontrado ');
@@ -427,10 +427,10 @@ function comprobar_items_carrito(){
                 // console.log(dataJSON.carrito[0].nombre)
                 for (let i=0; i < dataJSON.carrito.length; i++){
                     
-                    agregarItemAlCarrito(dataJSON.carrito[i].nombre,dataJSON.carrito[i].precio, dataJSON.carrito[i].imagenSrc, dataJSON.carrito[i].id)
+                    agregarItemAlCarrito(dataJSON.carrito[i].nombre,dataJSON.carrito[i].precio, dataJSON.carrito[i].imagenSrc, dataJSON.carrito[i].id, dataJSON.carrito[i].cantidad);
                 }
                 
-            }
+            };
                             //console.log(dataJSON);
         })
         .catch(function (error) {
