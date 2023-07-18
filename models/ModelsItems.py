@@ -9,12 +9,12 @@ class ModelItems():
             if item is not None:
                 check = self.check_producto(db, item.cod)
                 if not check:
-                    cursor = db.connection.cursor()
+                    cursor = db.cursor()
                     sql= """INSERT INTO productos (cod, nombre, descripcion,  precio, stock, src,  categoria, marca, tamanio) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
                     data = (item.cod, item.nombre, item.descripcion, item.precio, item.stock, item.src,  item.categoria, item.marca, item.tamanio)
                     cursor.execute(sql, data)
-                    db.connection.commit()
-                    db.connection.close()
+                    db.commit()
+                    db.close()
                     return True
                 else:
                     False
@@ -27,7 +27,7 @@ class ModelItems():
     @classmethod
     def lista_de_productos(self, db):
         try:
-            cursor = db.connection.cursor()
+            cursor = db.cursor()
             sql = "SELECT * FROM productos WHERE stock > 0"
             cursor.execute(sql)
             items = cursor.fetchall()
@@ -46,7 +46,7 @@ class ModelItems():
     @classmethod
     def check_producto(self, db, cod):
         try:
-            cursor = db.connection.cursor()
+            cursor = db.cursor()
             sql = f"SELECT cod FROM productos WHERE cod = {cod}"
             cursor.execute(sql)
             item = cursor.fetchone()
@@ -62,7 +62,7 @@ class ModelItems():
     @classmethod
     def check_producto_db(self, db, cod):
         try:
-            cursor = db.connection.cursor()
+            cursor = db.cursor()
             sql = f"SELECT * FROM productos WHERE cod = {cod}"
             cursor.execute(sql)
             item = cursor.fetchone()

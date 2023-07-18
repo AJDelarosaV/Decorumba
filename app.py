@@ -1,11 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, flash,jsonify, json, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash,jsonify, send_from_directory
 from flask_mysqldb import MySQL
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_login import LoginManager, login_user, logout_user, login_required
 from datetime import datetime
 from flask_cors import CORS
-import os
-import mercadopago
 from config import config
+import pymysql
 #--------------------------------------------------------------------
 #Models
 from models.ModelsUser import ModelUser
@@ -24,9 +23,12 @@ from models.entities.carrito import ItemCarrito
 
 
 app = Flask(__name__)
+db = pymysql.Connect(host='localhost', user='root', passwd='', db='decorumbas')
 CORS(app)
-db = MySQL(app)
+# db = MySQL(app)
+
 login_manager_app= LoginManager(app)
+
 
 # sdk= mercadopago.SDK("access-token")
 
@@ -135,7 +137,7 @@ CONFIGURACION DE RUTAS PARA LOS PRODUCTOS
 @app.route('/inventario')
 @login_required
 def inventario():
-    cursor = db.connection.cursor()
+    cursor = db.cursor()
     cursor.execute('SELECT * FROM productos WHERE stock > 0')
 
     result= cursor.fetchall()
@@ -159,9 +161,9 @@ def addItem():
 
     sql = """INSERT INTO productos(cod, nombre, descripcion, precio, stock, src, categoria, marca, tamanio) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
     data = (item.cod, item.nombre , item.descripcion, item.precio,  item.stock, item.src, item.categoria, item.marca, item.tamanio)
-    cursor = db.connection.cursor()
+    cursor = db.cursor()
     cursor.execute(sql, data)
-    db.connection.commit()
+    db.commit()
     cursor.close()
 
 
@@ -172,11 +174,11 @@ def addItem():
 @login_required
 def borrar(cod):
 
-    cursor = db.connection.cursor()
+    cursor = db.cursor()
     sql = f"""DELETE FROM productos WHERE `productos`.`cod` = {cod}"""
 
     cursor.execute(sql)
-    db.connection.commit()
+    db.commit()
 
 
     return redirect(url_for('inventario'))
@@ -190,9 +192,9 @@ def modificar(codigo):
 
     sql = """UPDATE productos SET cod=%s, nombre=%s, descripcion=%s, precio=%s, stock=%s, src=%s, categoria=%s, marca=%s, tamanio=%s WHERE cod=%s"""
     data = (item.cod, item.nombre , item.descripcion, item.precio,  item.stock, item.src, item.categoria, item.marca, item.tamanio, codigo)
-    cursor = db.connection.cursor()
+    cursor = db.cursor()
     cursor.execute(sql, data)
-    db.connection.commit()
+    db.commit()
     cursor.close()
 
     return redirect(url_for('inventario'))
@@ -205,7 +207,7 @@ CONFIGURACION DE RUTAS PARA EL CARRITO DE COMPRA
 #LISTA DE LOS ITEMS EN EL CARRITO
 @app.route('/carrito', methods= ['GET'])
 def carrito():
-    cursor = db.connection.cursor()
+    cursor = db.cursor()
     cursor.execute('SELECT * FROM carrito')
     row = cursor.fetchall()
     carro = []
@@ -219,7 +221,7 @@ def carrito():
 #CONSULTA ITEM CARRITO
 @app.route('/carrito/<int:cod>', methods= ['GET'])
 def consulta_carrito(cod):
-    cursor = db.connection.cursor()
+    cursor = db.cursor()
     cursor.execute(f'SELECT * FROM carrito WHERE id= {cod}')
     row = cursor.fetchone()
 
@@ -283,78 +285,6 @@ CONFIGURACION DE RUTAS PARA MERCADO PAGO
 ###########################################################
 """
 
-# @app.route('/create_preference', methods= ['GET', 'POST'])
-# def preferencias():
-#     if request.method == 'GET':
-#         # title= request.json.get('description')
-#         # quantity= request.json.get('quantity')
-#         # price= request.json.get('price')
-
-#         preference_data = {
-#             "items": [
-#             {
-#                 "category_id": "ZAPATERIA",
-#                 "currency_id": "ARS",
-#                 "description": "ZAPATOS NIKE TALLA 40",
-#                 "id": "1212121212",
-#                 "quantity": 1,
-#                 "title": "ZAPATOS",
-#                 "unit_price": 10000
-#             }
-#             ],
-#             'back_urls': {
-#                 "success": "http://127.0.0.1:5000/",
-#                 "failure": "http://127.0.0.1:5000/",
-#                 "pending": ""
-#             },
-#             'auto_return': "approved",
-#             # 'notification_url':"http://127.0.0.1:5000/repuesta",
-#             "payer": {
-#                 "address": {
-#                 "street_name": "SAN LUIS",
-#                 "street_number": 248,
-#                 "zip_code": "1629"
-#                 },
-#                 "date_created": 'null',
-#                 "email": "delarosa.valentina.d@gmail.com",
-#                 "identification": {
-#                 "number": "95887949",
-#                 "type": "DNI"
-#                 },
-#                 "last_purchase": 'null',
-#                 "name": "VALENTINA",
-#                 "phone": {
-#                 "area_code": "11",
-#                 "number": "25454237"
-#                 },
-#                 "surname": "DE LA ROSA"
-#             },
-#             "shipments": {
-#                 "default_shipping_method": 'null',
-#                 "receiver_address": {
-#                 "apartment": "",
-#                 "city_name": 'null',
-#                 "country_name": 'null',
-#                 "floor": "",
-#                 "state_name": 'null',
-#                 "street_name": "",
-#                 "street_number": 'null',
-#                 "zip_code": ""
-#                 }
-#             },
-#             "total_amount": 'null'
-# }
-        
-
-#         preference_response = sdk.preference().create(preference_data)
-#         preference = preference_response["response"]
-#         return preference
-#     else:
-#         return 'GET'
-
-# @app.route('/respuesta')
-# def respuesta_mercadopago():
-#     return 'Exito'
 
 
 
@@ -365,5 +295,9 @@ def sobre_nosotros():
 if  __name__ =='__main__':
     app.config.from_object(config['development'])
     app.run()
+
+
+
+
 
 

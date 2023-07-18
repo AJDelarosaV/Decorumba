@@ -6,7 +6,7 @@ class ModelUser():
     @classmethod
     def login(self, db, usuario, password):
         try:
-            cursor = db.connection.cursor()
+            cursor = db.cursor()
             sql= """SELECT * FROM usuarios WHERE username = '{}'""".format(usuario)
             cursor.execute(sql)
             row=cursor.fetchone()        
@@ -21,7 +21,7 @@ class ModelUser():
     @classmethod
     def get_by_id(self, db, id):
         try:
-            cursor = db.connection.cursor()
+            cursor = db.cursor()
             sql= """SELECT * FROM usuarios WHERE id_usuario = '{}'""".format(id)
             cursor.execute(sql)
             row=cursor.fetchone()
@@ -35,11 +35,11 @@ class ModelUser():
     @classmethod
     def sign_up(self, db, user):
         try:
-            cursor = db.connection.cursor()
+            cursor = db.cursor()
             sql= """INSERT INTO `usuarios`(`id_usuario`, `username`, `password`, `fullname`, `telefono`, `email`, `direccion`, `cp`, `ciudad`, `fecha_creacion`,  `autorizado`) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')""".format('null', user.username, user.password, user.fullname, user.telefono, user.email, user.direccion, user.cp, user.ciudad, user.fecha_creacion, user.autorizado)
             cursor.execute(sql)
-            db.connection.commit()
-            db.connection.close()
+            db.commit()
+            db.close()
                 
         except Exception as ex:
             raise Exception(ex)
@@ -47,7 +47,7 @@ class ModelUser():
     @classmethod
     def get_by_username(self, db, user):
         try:
-            cursor = db.connection.cursor()
+            cursor = db.cursor()
             sql= """SELECT username FROM usuarios WHERE username = '{}'""".format(user.username)
             cursor.execute(sql)
             row=cursor.fetchone()
@@ -62,7 +62,7 @@ class ModelUser():
     @classmethod
     def get_by_email(self, db, user):
         try:
-            cursor = db.connection.cursor()
+            cursor = db.cursor()
             sql= """SELECT email FROM usuarios WHERE email = '{}'""".format(user.email)
             cursor.execute(sql)
             row=cursor.fetchone()

@@ -8,6 +8,7 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    SERVER_NAME="127.0.0.1:3500"
     MYSQL_HOST = 'localhost'
     MYSQL_USER = 'root'
     MYSQL_PASSWORD = ''

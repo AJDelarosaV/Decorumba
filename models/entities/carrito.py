@@ -12,7 +12,7 @@ class ItemCarrito:
 
     @classmethod
     def consulta_carrito(self, db, cod):
-        cursor= db.connection.cursor()
+        cursor= db.cursor()
         sql= f"SELECT * FROM carrito WHERE id= {cod}"
         cursor.execute(sql)
         row= cursor.fetchone()
